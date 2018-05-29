@@ -87,10 +87,8 @@ export default {
   }),
   created () {
     d3.csv(csv, (d) => ({
-      Work_accident: Number(d.Work_accident),
       average_montly_hours: Number(d.average_montly_hours),
       last_evaluation: Number(d.last_evaluation),
-      left: Number(d.left),
       number_project: Number(d.number_project),
       promotion_last_5years: Number(d.promotion_last_5years),
       salary: d.salary,

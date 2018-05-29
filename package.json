@@ -1,0 +1,36 @@
+{
+  "name": "hr-vis",
+  "version": "1.0.0",
+  "description": "Interactive visualisation of HR data",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel ./src/index.html"
+  },
+  "keywords": [
+    "hr",
+    "interactive",
+    "ui",
+    "visualisation"
+  ],
+  "author": "Yin Kelly",
+  "license": "ISC",
+  "dependencies": {
+    "d3": "^5.4.0",
+    "lodash": "^4.17.10",
+    "vega": "^3.3.1",
+    "vega-embed": "^3.13.2",
+    "vega-lite": "^2.4.3",
+    "vue": "^2.5.16",
+    "vuetify": "^1.0.18"
+  },
+  "devDependencies": {
+    "babel-plugin-lodash": "^3.3.2",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.19.1",
+    "eslint-plugin-vue": "^4.5.0",
+    "parcel-bundler": "^1.8.1",
+    "parcel-plugin-eslint": "^1.0.4",
+    "parcel-plugin-vue": "^1.5.0"
+  }
+}

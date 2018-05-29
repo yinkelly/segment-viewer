@@ -22,14 +22,14 @@
               wrap>
               <v-flex xs12>
                 <selection-card
-                  name="Segment"
+                  name="Segment profile"
                   :selections="selections"
                   :on-selection-change="updateSegment"
                   color="blue" />
               </v-flex>
               <v-flex xs12>
                 <selection-card
-                  name="Overall"
+                  name="Overall distribution"
                   :selections="[]"
                   :on-selection-change="updateSegment"
                   color="gray" />

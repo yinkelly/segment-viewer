@@ -7,14 +7,40 @@
 <script>
 import vegaembed from 'vega-embed'
 import * as d3 from 'd3'
+import _ from 'lodash'
+
+const colorMap = {
+  base: 'gray',
+  segment: 'blue'
+}
 
 export default {
   props: {
     name: String,
-    data: Object
+    base: Array,
+    segment: Array
+  },
+  data () {
+    return {
+      config: {
+        style: { bar: { fillOpacity: 0.5 } },
+        view: { stroke: 'transparent' },
+        axisX: {
+          grid: true,
+          gridWidth: 1,
+          gridDash: [
+            2,
+            5
+          ],
+          domainWidth: 0,
+          tickWidth: 0
+        },
+        axisY: { tickWidth: 0 }
+      }
+    }
   },
   computed: {
-    vegaSpec () {
+    commonEncoding () {
       const yBin = d3.set([
         'satisfaction_level',
         'last_evaluation',
@@ -22,59 +48,51 @@ export default {
       ]).has(this.name)
 
       return {
-        $schema: 'https://vega.github.io/schema/vega-lite/v2.json',
-        mark: 'bar',
-        encoding: {
-          y: {
-            bin: yBin,
-            field: this.name,
-            type: yBin ? 'quantitative' : 'nominal'
-          },
-          x: {
-            aggregate: 'count',
-            type: 'quantitative',
-            stack: null
-          },
-          color: {
-            field: 'left',
-            type: 'nominal',
-            scale: {
-              domain: [
-                0,
-                1
-              ],
-              range: [
-                'gray',
-                'blue'
-              ],
-              type: 'ordinal'
-            }
-          }
+        y: {
+          bin: yBin,
+          field: this.name,
+          type: yBin ? 'quantitative' : 'nominal'
         },
-        config: {
-          style: { bar: { fillOpacity: 0.5 } },
-          view: { stroke: 'transparent' },
-          axisX: {
-            grid: true,
-            gridWidth: 1,
-            gridDash: [
-              2,
-              5
-            ],
-            domainWidth: 0,
-            tickWidth: 0
-          },
-          axisY: { tickWidth: 0 }
+        x: {
+          aggregate: 'count',
+          type: 'quantitative',
+          stack: null
         }
+      }
+    },
+    vegaSpec () {
+      return {
+        $schema: 'https://vega.github.io/schema/vega-lite/v2.4.3.json',
+        layer: _.map([
+          'base',
+          'segment'
+        ], (val) => ({
+          mark: 'bar',
+          data: { values: this[val] },
+          encoding: {
+            color: { value: colorMap[val] },
+            ...this.commonEncoding
+          }
+        })),
+        config: this.config
       }
     }
   },
-  mounted () {
-    const spec = {
-      data: { values: this.data.overall },
-      ...this.vegaSpec
+  watch: {
+    segment: {
+      handler () {
+        this.renderChart()
+      },
+      deep: true
     }
-    vegaembed(`#histogram-${this.name}`, spec, { actions: false })
+  },
+  mounted () {
+    this.renderChart()
+  },
+  methods: {
+    renderChart () {
+      vegaembed(`#histogram-${this.name}`, this.vegaSpec, { actions: false })
+    }
   }
 }
 </script>

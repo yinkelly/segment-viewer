@@ -2,13 +2,15 @@
   <v-card>
     <v-card-media
       :height="30"
-      :class="`segment segment-${name}`" />
-    <v-card-text>
+      :class="name" />
+    <v-card-title>
       <div class="title">{{ name }}</div>
+    </v-card-title>
+    <v-card-text>
       <template v-for="selection in selections">
+        <div class="subheading">{{ selection.name }}</div>
         <v-select
           :items="selection.options"
-          :label="selection.name"
           v-model="selected[selection.name]"
           multiple
           hide-details />
@@ -18,6 +20,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 
 export default {
   props: {
@@ -39,9 +42,19 @@ export default {
 }
 </script>
 
-<style>
-  .segment {
+<style scoped>
+  .Segment {
     background: blue;
-    opacity: 0.5;
+    opacity: 0.6;
+  }
+  .Overall {
+    background: gray;
+    opacity: 0.6;
+  }
+  .subheading {
+    margin-top: 20px;
+  }
+  .subheading:first-child {
+    margin-top: 0px;
   }
 </style>

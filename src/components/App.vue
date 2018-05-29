@@ -1,20 +1,42 @@
 <template>
   <v-app id="app">
+    <v-toolbar
+      color="grey darken-4"
+      dark
+      dense>
+      <v-toolbar-side-icon />
+      <v-toolbar-title>HR Data Explorer</v-toolbar-title>
+      <v-spacer />
+    </v-toolbar>
     <v-content>
       <v-container
         v-if="allData.length > 0"
-        grid-list-md
+        grid-list-xl
         fluid>
         <v-layout
           row
           wrap>
-          <v-flex xs2>
-            <selection-card
-              name="Segment"
-              :selections="selections"
-              :on-selection-change="updateSegment" />
+          <v-flex xs3>
+            <v-layout
+              row
+              wrap>
+              <v-flex xs12>
+                <selection-card
+                  name="Segment"
+                  :selections="selections"
+                  :on-selection-change="updateSegment"
+                  color="blue" />
+              </v-flex>
+              <v-flex xs12>
+                <selection-card
+                  name="Overall"
+                  :selections="[]"
+                  :on-selection-change="updateSegment"
+                  color="gray" />
+              </v-flex>
+            </v-layout>
           </v-flex>
-          <v-flex xs10>
+          <v-flex xs9>
             <v-layout
               row
               wrap>
@@ -24,7 +46,8 @@
                 <div class="subtitle">{{ formatLabel(variable) }}</div>
                 <histogram
                   :name="variable"
-                  :data="getHistograms(variable)" />
+                  :base="allData"
+                  :segment="segmentData" />
               </v-flex>
             </v-layout>
           </v-flex>
@@ -76,29 +99,15 @@ export default {
       time_spend_company: Number(d.time_spend_company),
       left: d.left
     })).then((data) => {
-      console.log(data)
       this.allData = data
       this.segmentData = data
-
       this.selections = this.selectionVariables.map((variable) => ({
         name: variable,
         options: d3.set(data.map((d) => d[variable])).values()
       }))
-      console.log(this.selections)
     })
   },
-  // watch: {
-  //   segmentData() {
-  //     this.getHistograms()
-  //   }
-  // }
   methods: {
-    getHistograms () {
-      return {
-        overall: this.allData,
-        segment: this.segmentData
-      }
-    },
     formatLabel (str) {
       return str.replace(/_/g, ' ')
     },
